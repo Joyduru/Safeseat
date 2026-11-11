@@ -85,6 +85,7 @@ near contract call-function as-read-only $C get_events json-args '{}' network-co
 | `cancel_event(event_id)` | Organizer | Refunds every current holder now. |
 | `claim_payout(event_id)` | Anyone | After the safety window, sends locked money to the organizer. |
 | `get_events`, `get_event`, `get_tickets_for_event`, `get_tickets_for_owner`, `get_ticket` | Anyone | Views. |
+| `nft_token`, `nft_tokens_for_owner`, `nft_supply_for_owner`, `nft_metadata` | Anyone | Standard NEP-171 views for wallets and explorers. |
 
 ## Known limits (honest list)
 
