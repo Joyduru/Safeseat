@@ -1,0 +1,25 @@
+[package]
+name = "safeseat"
+version = "0.1.0"
+edition = "2021"
+description = "SafeSeat: event tickets that hold their own refund (NEAR HACKATHON 2026)"
+license = "MIT"
+repository = "https://github.com/YOUR_GITHUB/safeseat"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+near-sdk = "5.6"
+
+[dev-dependencies]
+near-sdk = { version = "5.6", features = ["unit-testing"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true

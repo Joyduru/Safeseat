@@ -1,0 +1,230 @@
+:root {
+  --bg: #e9edf3;
+  --paper: #ffffff;
+  --ink: #10203b;
+  --muted: #55627a;
+  --line: #c9d1de;
+  --act: #3346d3;
+  --act-ink: #ffffff;
+  --held: #0b7a55;
+  --held-bg: #e3f4ec;
+  --danger: #b4302a;
+  --stub-cut: var(--bg);
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1524;
+    --paper: #17223a;
+    --ink: #e7ecf6;
+    --muted: #9aa8c2;
+    --line: #2b3a58;
+    --act: #8193ff;
+    --act-ink: #0d1524;
+    --held: #4fd6a2;
+    --held-bg: #123528;
+    --danger: #ff8a80;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.55 var(--body);
+}
+
+a { color: var(--act); }
+
+.top, main, .foot {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 800 22px/1 var(--display);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* A tiny ticket with a punched hole */
+.brand-mark {
+  width: 28px;
+  height: 18px;
+  border-radius: 3px;
+  background: radial-gradient(circle at 100% 50%, var(--bg) 4px, var(--held) 4.5px);
+}
+
+.hero { padding: 48px 0 28px; }
+
+.hero h1 {
+  font: 800 clamp(34px, 7vw, 56px)/1.02 var(--display);
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+  max-width: 15ch;
+}
+
+.hero p { margin: 0; max-width: 52ch; color: var(--muted); font-size: 19px; }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 24px;
+}
+
+.tabs button {
+  background: none;
+  border: 0;
+  padding: 10px 14px;
+  font: 700 16px var(--body);
+  color: var(--muted);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--act); }
+
+button {
+  font: 700 16px var(--body);
+  border-radius: 10px;
+  padding: 11px 16px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+button.primary { background: var(--act); color: var(--act-ink); }
+button.secondary { background: transparent; color: var(--act); border-color: var(--act); }
+button.ghost { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 400; max-width: 50vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+button.danger { background: transparent; color: var(--danger); border-color: var(--danger); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--act); outline-offset: 2px; }
+
+/* The ticket: main body + perforated stub that shows the money it holds */
+.show {
+  display: grid;
+  grid-template-columns: 1fr 132px;
+  background: var(--paper);
+  border-radius: 16px;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.show-main { padding: 22px 24px; min-width: 0; }
+
+.show h3 { font: 800 26px/1.1 var(--display); margin: 0 0 6px; letter-spacing: -0.01em; }
+.show h4 { font: 700 15px var(--body); margin: 18px 0 8px; color: var(--muted); }
+.meta { margin: 0 0 14px; color: var(--muted); }
+
+.facts { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0 0 12px; }
+.facts dt { font-size: 14px; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.status { margin: 0 0 14px; font-size: 15px; color: var(--muted); }
+.actions, .organizer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.organizer h4 { width: 100%; margin-bottom: 0; }
+.soldout { font-weight: 700; color: var(--muted); }
+
+.resale-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+
+.stub {
+  border-left: 2px dashed var(--line);
+  background: var(--held-bg);
+  color: var(--held);
+  border-radius: 0 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px 10px;
+}
+
+/* Punched notches where the stub tears off */
+.show::before, .show::after {
+  content: "";
+  position: absolute;
+  right: 122px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+.show::before { top: -10px; }
+.show::after { bottom: -10px; }
+
+.stub-amount { font: 800 34px/1 var(--display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stub-unit { font-size: 14px; font-weight: 700; margin-top: 6px; }
+
+.status-Cancelled .stub, .status-PaidOut .stub { background: transparent; color: var(--muted); }
+.status-Cancelled .stub-amount, .status-PaidOut .stub-amount { font-size: 22px; }
+
+form.inline { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+form.inline label { flex: 1 1 200px; }
+
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 15px; }
+
+input {
+  font: 400 17px var(--body);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+
+.host { background: var(--paper); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.host .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.host > button { align-self: flex-start; }
+.hint { font-weight: 400; color: var(--muted); font-size: 14px; }
+
+.empty { text-align: left; color: var(--muted); padding: 12px 0 30px; }
+.empty p { margin: 0 0 12px; font-size: 19px; }
+.error { background: var(--paper); border-left: 4px solid var(--danger); padding: 12px 16px; border-radius: 8px; }
+.fine { font-size: 14px; margin: 14px 0 0; }
+
+.foot { color: var(--muted); font-size: 14px; padding-top: 24px; padding-bottom: 48px; overflow-wrap: anywhere; }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 12px 18px;
+  border-radius: 12px;
+  max-width: calc(100vw - 40px);
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .show { grid-template-columns: 1fr; }
+  .stub { border-left: 0; border-top: 2px dashed var(--line); border-radius: 0 0 16px 16px; flex-direction: row; gap: 10px; padding: 14px; }
+  .stub-unit { margin-top: 0; }
+  .show::before, .show::after { display: none; }
+  .host .row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
