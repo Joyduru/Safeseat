@@ -132,7 +132,7 @@ near contract call-function as-read-only $C get_events json-args '{}' network-co
 
 ## Built with
 
-Rust, near-sdk 5, Vite, NEAR Wallet Selector (MyNearWallet, Meteor). Code written during the hackathon with help from Claude.
+Rust, near-sdk 5, Vite, NEAR Wallet Selector (MyNearWallet, Meteor). Code written during the hackathon.
 
 ## License
 
