@@ -4,6 +4,8 @@
 
 Tracks: NFTs That Do Something, Real-World Money.
 
+**Live on NEAR testnet:** the contract is deployed at [`safeseat-demo-44511.testnet`](https://testnet.nearblocks.io/address/safeseat-demo-44511.testnet) ([deploy transaction](https://explorer.testnet.near.org/transactions/Qcp1bQhT1hcvbiDDxwD5t7rSJFNzusKeLtfA7CBpTfZ)).
+
 ## The problem
 
 When you buy a ticket today, your money goes straight to the organizer. If the show is cancelled, you chase a refund for weeks. If it sells out, scalpers resell at 5x. Fans carry all the risk.
@@ -51,7 +53,7 @@ The buyer's payment goes to the seller and the organizer right away. The origina
 
 ## Try it in 2 minutes (do X, see Y)
 
-1. Open the app and connect a testnet wallet (MyNearWallet or Meteor).
+1. Open the app ([run it locally](#option-a-use-the-deployed-contract) in under a minute) and connect a testnet wallet (MyNearWallet or Meteor).
 2. **Host a show**: set doors open 10 minutes from now, price 1 NEAR, cap 1.2 NEAR, and "hold money after doors open" to 5 minutes. Click **Create show**. You see it under **Shows**, holding 0 NEAR.
 3. From a second account, click **Buy a ticket for 1 NEAR**. The stub now shows **1 NEAR held for fans**.
 4. In **My tickets**, try to resell for 3 NEAR. The contract rejects it: *Price is above the resale cap*.
@@ -61,6 +63,19 @@ The buyer's payment goes to the seller and the organizer right away. The origina
 (Or skip step 6, wait until the safety window ends, and click **Collect** as the organizer.)
 
 ## Run it yourself
+
+### Option A: use the deployed contract
+
+You only need Node 18+.
+
+```bash
+cd frontend
+cp .env.example .env        # set VITE_CONTRACT_ID=safeseat-demo-44511.testnet
+npm install
+npm run dev                 # open http://localhost:5173
+```
+
+### Option B: deploy your own contract
 
 You need [Rust](https://rustup.rs), [cargo-near](https://github.com/near/cargo-near), [near-cli-rs](https://github.com/near/near-cli-rs) and Node 18+.
 
@@ -89,12 +104,30 @@ npm run dev                 # open http://localhost:5173
 
 If a CLI command's syntax has changed, run it with `--help`; the interactive mode (`near` with no arguments) walks you through the same steps.
 
+#### On Windows
+
+- **Build with `--no-abi`.** On Windows, cargo-near's optional ABI step fails to link (`unresolved external symbol bls12381_...`). Skip it; the contract works the same:
+  ```bash
+  cargo near build non-reproducible-wasm --no-abi
+  near contract deploy safeseat-YOURNAME.testnet use-file target/near/safeseat.wasm \
+    without-init-call network-config testnet sign-with-keychain send
+  ```
+- **Installing near-cli-rs.** `npm install -g near-cli-rs` can fail under Git Bash (`tar: Cannot connect to C:`). Download `near-cli-rs-x86_64-pc-windows-msvc.tar.gz` from the [releases page](https://github.com/near/near-cli-rs/releases) and unpack it with Windows' own tar (`C:\Windows\System32\tar.exe -xzf ...`), or run the install from PowerShell.
+- **`cargo test` fails to build `aws-lc-sys`.** That's a C toolchain problem with a dependency of the NEAR SDK's test mode, not the contract. Run the tests under WSL instead.
+
 ### Quick check from the terminal
 
 ```bash
-C=safeseat-YOURNAME.testnet
+C=safeseat-demo-44511.testnet
 near contract call-function as-read-only $C get_events json-args '{}' network-config testnet now
 ```
+
+### Host the frontend on Vercel
+
+1. On [vercel.com](https://vercel.com), choose **Add New → Project** and import this repo.
+2. Set **Root Directory** to `frontend`. Vercel detects Vite; keep the default build command (`npm run build`) and output directory (`dist`).
+3. Add the environment variables `VITE_CONTRACT_ID` = `safeseat-demo-44511.testnet` (or your own contract) and `VITE_NETWORK` = `testnet`.
+4. Click **Deploy**. The contract ID is baked in at build time, so redeploy after changing it.
 
 ## How it uses NEAR
 
