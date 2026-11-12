@@ -8,9 +8,13 @@ Tracks: NFTs That Do Something, Real-World Money.
 
 When you buy a ticket today, your money goes straight to the organizer. If the show is cancelled, you chase a refund for weeks. If it sells out, scalpers resell at 5x. Fans carry all the risk.
 
-## What SafeSeat does
+![Today, a fan's payment goes straight to the organizer. Cancellations mean chasing refunds, scalpers resell at 5x, and if the organizer vanishes the money is gone.](docs/images/problem.svg)
+
+## How SafeSeat solves it
 
 Your money doesn't go to the organizer when you buy. It stays locked inside your ticket, which is an NFT on NEAR, until one of three things happens:
+
+![The fan's 1 NEAR is locked inside the ticket NFT. It goes to the organizer if the show happens, back to the holder if it is cancelled, and moves with the ticket if it is resold.](docs/images/solution.svg)
 
 | What happens | Where the money goes |
 | --- | --- |
@@ -19,6 +23,31 @@ Your money doesn't go to the organizer when you buy. It stays locked inside your
 | A fan resells | The price can't go above the organizer's cap. The seller is paid, the organizer gets a royalty, and the locked refund moves to the new holder with the ticket. |
 
 The organizer is paid for delivering the show, not for selling tickets.
+
+### A show from start to finish
+
+![Timeline: tickets are on sale until doors open, then a safety window runs in which the organizer can still cancel, then anyone can trigger the payout to the organizer.](docs/images/lifecycle.svg)
+
+### Reselling a ticket
+
+Example: face value 1 NEAR, resale cap 1.2 NEAR, organizer royalty 5%.
+
+```mermaid
+sequenceDiagram
+    participant S as Seller
+    participant C as SafeSeat contract
+    participant B as Buyer
+    participant O as Organizer
+    S->>C: list_ticket at 3 NEAR
+    C-->>S: Rejected, price is above the resale cap
+    S->>C: list_ticket at 1.2 NEAR
+    B->>C: buy_resale and attach 1.2 NEAR
+    C->>O: 0.06 NEAR royalty
+    C->>S: 1.14 NEAR
+    C->>B: The ticket, still holding its 1 NEAR refund
+```
+
+The buyer's payment goes to the seller and the organizer right away. The original 1 NEAR stays locked in the ticket, so the new holder is protected the same way the first buyer was.
 
 ## Try it in 2 minutes (do X, see Y)
 
