@@ -5,7 +5,10 @@ import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
 import "@near-wallet-selector/modal-ui/styles.css";
 
 export const NETWORK = import.meta.env.VITE_NETWORK || "testnet";
-export const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || "";
+// Defaults to the public demo contract on testnet, so the app works without a .env.
+// Set VITE_CONTRACT_ID to use your own deployment.
+const DEMO_CONTRACT = NETWORK === "testnet" ? "safeseat-demo-44511.testnet" : "";
+export const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || DEMO_CONTRACT;
 
 const RPC = {
   testnet: ["https://test.rpc.fastnear.com", "https://rpc.testnet.near.org"],
