@@ -228,3 +228,51 @@ input {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Ticket NFT gallery */
+.nft-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.nft-dialog::backdrop { background: rgba(5, 10, 20, 0.6); }
+
+.nft-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 14px;
+  background: var(--bg);
+}
+.nft-head h2 { font: 800 26px/1.1 var(--display); margin: 0 0 4px; letter-spacing: -0.01em; }
+.nft-head .meta { margin: 0; }
+
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  padding: 0 20px 20px;
+}
+
+.nft { background: var(--paper); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.nft-art { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+.nft-body { padding: 14px 16px 16px; }
+.nft-body h3 { font: 800 19px/1.2 var(--display); margin: 0 0 10px; }
+.nft-facts { margin: 0 0 4px; display: grid; gap: 6px; }
+.nft-facts dt { font-size: 13px; color: var(--muted); }
+.nft-facts dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.nft-facts code { font-size: 14px; }
+.nft form.inline label { flex-basis: 100%; }
+
+@media (max-width: 560px) {
+  .nft-head, .nft-grid { padding-left: 16px; padding-right: 16px; }
+  .nft-grid { grid-template-columns: 1fr; }
+}
