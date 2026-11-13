@@ -4,6 +4,12 @@
 
 Tracks: NFTs That Do Something, Real-World Money.
 
+SafeSeat is a ticketing app where every ticket is an NFT that carries the money paid for it. When a fan buys a seat, the payment doesn't go to the organizer. It stays locked inside the ticket. If the show happens, the organizer collects after a short safety window. If it's cancelled, every ticket pays its holder back in a single transaction, with no claim forms. If a fan resells, the price can't go above a cap the organizer sets. The refund moves to the new owner along with the ticket.
+
+For fans, a ticket is something you can see and own. Book two seats and you hold two NFTs, each showing its seat, its token ID and the NEAR it is holding for you. You can resell a ticket or send it to a friend from the same screen.
+
+For organizers, it's a fair deal: you get paid for putting on the show, scalpers can't push prices past your cap, and you earn a royalty every time a ticket is resold.
+
 **Live on NEAR testnet:** the contract is deployed at [`safeseat-demo-44511.testnet`](https://testnet.nearblocks.io/address/safeseat-demo-44511.testnet) ([deploy transaction](https://explorer.testnet.near.org/transactions/Qcp1bQhT1hcvbiDDxwD5t7rSJFNzusKeLtfA7CBpTfZ)).
 
 ## The problem
@@ -25,6 +31,40 @@ Your money doesn't go to the organizer when you buy. It stays locked inside your
 | A fan resells | The price can't go above the organizer's cap. The seller is paid, the organizer gets a royalty, and the locked refund moves to the new holder with the ticket. |
 
 The organizer is paid for delivering the show, not for selling tickets.
+
+## A tour of the app
+
+The screenshots below come from the running app, connected to the live testnet contract. The connected account, `safeseat-demo-44511.testnet`, bought two seats for *Lagos Live*.
+
+### Shows
+
+Every show on sale, laid out like a paper ticket. The stub on the right shows how much NEAR the tickets are holding for fans right now. Fans buy at face value here, and any resale listings appear under the show. If you already hold tickets for a show, a **View your NFTs** button opens them.
+
+![Shows page: Lagos Live at Eko Hall, 1 NEAR a ticket, resale cap 1.2 NEAR, 2 of 20 seats sold, 2 NEAR held for fans. Buttons: Buy a ticket for 1 NEAR, View your 2 NFTs.](docs/screenshots/shows.png)
+
+### My tickets
+
+One card for each show you've booked. It shows how many tickets you hold, which seats they are, and how much of your money the tickets are holding. After a cancellation the stub reads **Refunded**; after the show it reads **Admit 2**.
+
+![My tickets page: Lagos Live, your tickets 2, seats 1 and 2, 2 NEAR held for you, and a View your 2 NFTs button.](docs/screenshots/my-tickets.png)
+
+### Your ticket NFTs
+
+Click **View your NFTs** to open your tickets for that show. You get one NFT per ticket, so booking two seats shows two. Each card shows:
+
+- **Artwork** for the show and seat. It turns grey once the show is cancelled or paid out.
+- **Title and token ID**, read from the contract's NEP-171 `nft_tokens_for_owner` view.
+- **Refund held**, the amount that ticket returns to you if the show is cancelled.
+- **Resell** (capped by the organizer) and **Give to a friend**, both available until doors open.
+- **A link to that token** on the testnet explorer.
+
+![NFT gallery for Lagos Live: two ticket NFTs, Seat 1 (token 1-1) and Seat 2 (token 1-2), each holding 1 NEAR, with resell and gift forms.](docs/screenshots/nft-gallery.png)
+
+### Host a show
+
+Organizers set the name, venue, start time, price, resale cap, number of seats, resale royalty, and how long the money stays held after doors open. Creating the show is one transaction.
+
+![Host a show form: show name, venue, doors open, ticket price 1 NEAR, resale cap 1.2 NEAR, 20 seats, 5% resale cut, hold money for 1440 minutes, Create show button.](docs/screenshots/host-a-show.png)
 
 ### A show from start to finish
 
@@ -56,7 +96,7 @@ The buyer's payment goes to the seller and the organizer right away. The origina
 1. Open the app ([run it locally](#option-a-use-the-deployed-contract) in under a minute) and connect a testnet wallet (MyNearWallet or Meteor).
 2. **Host a show**: set doors open 10 minutes from now, price 1 NEAR, cap 1.2 NEAR, and "hold money after doors open" to 5 minutes. Click **Create show**. You see it under **Shows**, holding 0 NEAR.
 3. From a second account, click **Buy a ticket for 1 NEAR**. The stub now shows **1 NEAR held for fans**.
-4. In **My tickets**, try to resell for 3 NEAR. The contract rejects it: *Price is above the resale cap*.
+4. In **My tickets**, click **View your NFT**. Each ticket you bought shows as its own NFT (buy two and you see two). Try to resell one for 3 NEAR. The contract rejects it: *Price is above the resale cap*.
 5. List it for 1.2 NEAR and buy it from a third account. The ticket moves, and so does its 1 NEAR refund.
 6. As the organizer, click **Cancel show and refund everyone**. The current holder gets 1 NEAR back immediately. Check it on testnet.nearblocks.io.
 
@@ -155,6 +195,7 @@ near contract call-function as-read-only $C get_events json-args '{}' network-co
 - **Gifts can hide side payments.** `nft_transfer` is free, so two people could agree on a price off-chain. The cap stops public scalping, not private deals.
 - **Max 50 seats per show** so that cancelling refunds everyone in one transaction. Bigger shows would refund in batches.
 - **The contract pays storage** for tickets from its own balance. Keep a few testnet NEAR on the contract account.
+- **NFT artwork is drawn by the app.** The title, description and token ID come from the contract, but the picture is generated in the browser from the show and seat. Wallets and explorers show the token without that image. Adding a `media` field to the token metadata would fix this.
 - **Refund equals face value.** If you bought a resale ticket above face value, a cancellation refunds face value; the cap limits how much that can be.
 
 ## Next steps
